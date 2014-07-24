@@ -16,17 +16,18 @@ import org.codehaus.plexus.util.StringOutputStream;
 
 public class FlogExecutor {
 
-    public boolean isFlogInstalled(Launcher launcher, EnvVars environment, FilePath workspace) {
+    public boolean isFlogInstalled(Launcher launcher, EnvVars environment, FilePath workspace, String path) {
         try {
-            OutputStream out = launch(arguments("--help"), launcher, environment, workspace);
+            OutputStream out = launch(arguments(path, "--help"), launcher, environment, workspace);
 
+            launcher.getListener().getLogger().println("out: " + out);
             return out != null;
         } catch (Exception e) {
             return false;
         }
     }
 
-    public Map<String, StringOutputStream> execute(String[] rbDirectories, Launcher launcher, EnvVars environment, FilePath workspace, File buildRootDir) throws InterruptedException, IOException {
+    public Map<String, StringOutputStream> execute(String path, String[] rbDirectories, Launcher launcher, EnvVars environment, FilePath workspace, File buildRootDir) throws InterruptedException, IOException {
         Map<String, StringOutputStream> results = new HashMap<String, StringOutputStream>();
 
         for (String relativePath : rbDirectories) {
@@ -38,7 +39,7 @@ public class FlogExecutor {
             FilePath[] rubyFiles = getRubyFiles(workspace, buildRootDir, relativePath, launcher);
             for (FilePath rubyFile : rubyFiles) {
                 String rubyFilePath = rubyFile.toURI().getPath();
-                ArgumentListBuilder arguments = arguments("-ad", rubyFilePath);
+                ArgumentListBuilder arguments = arguments(path, "-ad", rubyFilePath);
 
                 StringOutputStream out = launch(arguments, launcher, environment, workspace);
                 if (out == null) {
@@ -65,9 +66,9 @@ public class FlogExecutor {
         return result >= 0 ? out : null;
     }
 
-    public ArgumentListBuilder arguments(String... args) {
+    public ArgumentListBuilder arguments(String path, String... args) {
         ArgumentListBuilder flogArguments = new ArgumentListBuilder();
-        flogArguments.add("flog");
+        flogArguments.add(path + "/flog");
         for (String arg : args) {
             flogArguments.add(arg);
         }

@@ -4,12 +4,12 @@
   <parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <version>1.397</version>
+    <version>1.532.3</version>
   </parent>
 
   <artifactId>rubyMetrics</artifactId>
   <packaging>hpi</packaging>
-  <version>1.5.1-SNAPSHOT</version>
+  <version>1.5.1</version>
   <name>Jenkins ruby metrics plugin</name>
   <url>http://wiki.jenkins-ci.org/display/JENKINS/Ruby+Metrics+Plugin</url>
 
@@ -39,6 +39,10 @@
       <id>repo.jenkins-ci.org</id>
       <url>http://repo.jenkins-ci.org/public/</url>
     </repository>
+    <repository>
+      <id>maven.jenkins-ci.org</id>
+      <url>http://maven.jenkins-ci.org/content/repositories/releases</url>
+    </repository>
   </repositories>
 
 
@@ -46,6 +50,7 @@
     <dependency>
       <groupId>org.jenkins-ci.main</groupId>
       <artifactId>maven-plugin</artifactId>
+      <version>2.5</version>
     </dependency>
 
       <dependency>
@@ -61,9 +66,9 @@
     </dependency>
 
     <dependency>
-          <groupId>net.sourceforge.jregex</groupId>
-          <artifactId>jregex</artifactId>
-          <version>1.2_01</version>
+        <groupId>net.sourceforge.jregex</groupId>
+        <artifactId>jregex</artifactId>
+        <version>1.2_01</version>
     </dependency>
   </dependencies>
 
@@ -93,12 +98,5 @@
       </extension>
     </extensions>
   </build>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>repo.jenkins-ci.org</id>
-            <url>http://repo.jenkins-ci.org/public/</url>
-        </pluginRepository>
-    </pluginRepositories>
-</project>  
+</project>
 

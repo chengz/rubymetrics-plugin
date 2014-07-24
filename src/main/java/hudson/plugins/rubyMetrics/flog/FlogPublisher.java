@@ -22,13 +22,19 @@ import org.kohsuke.stapler.DataBoundConstructor;
 
 public class FlogPublisher extends AbstractRubyMetricsPublisher {
 
+    private final String path;
     private final String rbDirectories;
     private final String[] splittedDirectories;
 
     @DataBoundConstructor
-    public FlogPublisher(String rbDirectories) {
+    public FlogPublisher(String path, String rbDirectories) {
+        this.path = path;
         this.rbDirectories = rbDirectories;
         this.splittedDirectories = (this.rbDirectories != null && this.rbDirectories.length() > 0 ? this.rbDirectories : ".").split("[\t\r\n]+");
+    }
+
+    public String getPath() {
+        return path;
     }
 
     public String getRbDirectories() {
@@ -42,12 +48,12 @@ public class FlogPublisher extends AbstractRubyMetricsPublisher {
         EnvVars environment = build.getEnvironment(listener);
         FilePath workspace = build.getModuleRoot();
 
-        if (!flog.isFlogInstalled(launcher, environment, workspace)) {
+        if (!flog.isFlogInstalled(launcher, environment, workspace, this.path)) {
             return fail(build, listener, "Seems flog is not installed. Ensure flog is in your PATH");
         }
         listener.getLogger().println("Publishing flog report...");
 
-        Map<String, StringOutputStream> execResults = flog.execute(splittedDirectories, launcher, environment, workspace, build.getRootDir());
+        Map<String, StringOutputStream> execResults = flog.execute(this.path, splittedDirectories, launcher, environment, workspace, build.getRootDir());
 
         FlogBuildResults buildResults = buildResults(build, execResults);
 

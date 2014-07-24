@@ -18,6 +18,7 @@ public class FlogExecutorTest extends HudsonTestCase {
 
     FlogExecutor flog = new FlogExecutor();
     EnvVars environment = new EnvVars();
+    String path;
     Launcher launcher;
     FilePath workspace;
     FreeStyleProject project;
@@ -31,16 +32,16 @@ public class FlogExecutorTest extends HudsonTestCase {
 
     @Test
     public void testExecute() throws InterruptedException, IOException {
-        if (flog.isFlogInstalled(launcher, environment, workspace)) {
-            assertTrue(flog.execute(new String[]{"/tmp"}, launcher, environment, workspace, project.getRootDir()).isEmpty());
+        if (flog.isFlogInstalled(launcher, environment, workspace, path)) {
+            assertTrue(flog.execute(path, new String[]{"/tmp"}, launcher, environment, workspace, project.getRootDir()).isEmpty());
         }
     }
 
     @Test
     public void testJoin() throws InterruptedException, IOException {
-        if (flog.isFlogInstalled(launcher, environment, workspace)) {
-            ArgumentListBuilder arguments = flog.arguments("-ad", new File("command_line_parser.rb").getAbsolutePath());
-            StringOutputStream out = flog.launch(arguments, launcher, environment, workspace);
+        if (flog.isFlogInstalled(launcher, environment, workspace, path)) {
+            ArgumentListBuilder arguments = flog.arguments(path, "-ad", new File("command_line_parser.rb").getAbsolutePath());
+            StringOutputStream out = flog.launch(path, arguments, launcher, environment, workspace);
             assertNotNull(out);
             assertTrue(out.toString().contains("CommandLineParser::parse"));
         }
